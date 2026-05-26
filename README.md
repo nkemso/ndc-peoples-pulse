@@ -1,43 +1,34 @@
-# NDC: The People's Pulse - Unified Build
+# NDC: The People's Pulse - Zero-Cost Multi-Agent Edition
 
-A decentralized, transparent, and action-oriented political platform for the Nigerian Democratic Congress (NDC).
+A decentralized mobilization platform for the NDC, engineered for **Zero Operating Costs** using free-tier protocols.
 
-## Project Structure
-- `/frontend`: React + Vite + Tailwind CSS (Mobile-First UI)
-- `/backend`: Node.js + Express + Prisma (PostgreSQL)
-- `docker-compose.yml`: For rapid local deployment
+## 🤖 Multi-Agent System
+- **Content Agent (Qwen 2.5)**: Powered by Hugging Face Inference API. Transforms policy into Pidgin/Simplified English.
+- **Strategy Agent (Llama 3.1)**: Powered by Groq. Analyzes ward-level data for actionable mobilization steps.
+- **Verification Agent**: Logic-based NIN/PVC integrity checker.
 
-## Features
-- **Mobile-First Design**: Optimized for mobile devices with a bottom navigation system.
-- **Biometric Onboarding**: Integrated flows for NIN/PVC verification.
-- **Financial Transparency**: Open Books ledger with mock blockchain hashes.
-- **Golden Works AI**: Policy-to-Pidgin content engine.
-- **USSD Bridge**: Offline access simulation for grassroots mobilization.
+## 🚀 Hands-Free Deployment Guide
 
-## Deployment
+I have set up a **Render Blueprint** in this repository. To deploy everything (Frontend + Backend + Database) at once for free:
 
-### 🚀 Rapid Deployment (Recommended)
+1.  **Create a Free Account** on [Render.com](https://render.com).
+2.  **Go to Blueprints**: Click "New" -> "Blueprint".
+3.  **Connect this Repository**: Select `ndc-peoples-pulse`.
+4.  **Click "Apply"**: Render will automatically build the Database, Backend, and Frontend based on the `render.yaml` file I created.
 
-#### Backend
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/nkemso/ndc-peoples-pulse)
+### Environment Variables to add in Render:
+*   `HF_TOKEN`: Get a free API token from [Hugging Face](https://huggingface.co/settings/tokens).
+*   `GROQ_API_KEY`: Get a free API key from [Groq Console](https://console.groq.com/keys).
+*   `PUSHER_APP_ID`, `PUSHER_KEY`, `PUSHER_SECRET`, `PUSHER_CLUSTER`: Get free keys from [Pusher](https://pusher.com).
 
-*Note: Ensure you configure the `DATABASE_URL` and `PUSHER_*` environment variables in the Render dashboard.*
+## 📱 Mobile-First Features
+- **Zero-Cost USSD Bridge**: Offline simulation via zero-rated protocols.
+- **Digital ID Card**: QR-code enabled membership verification.
+- **Financial Ledger**: "Open Books" transparency for radical trust.
 
-#### Frontend
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fnkemso%2Fndc-peoples-pulse&root-directory=frontend)
+## 🛠 Tech Stack
+- **Frontend**: React (Vite) + Tailwind CSS + Lucide Icons.
+- **Backend**: Node.js + Express + Prisma (Postgres).
+- **Multi-Agent**: Groq (Llama 3) & Hugging Face (Qwen).
 
-### Manual Instructions
-
-#### 1. Backend (PostgreSQL + Prisma)
-1. Set up a PostgreSQL database.
-2. Update `backend/.env` with your `DATABASE_URL`.
-3. Run `npm install` in the `backend` folder.
-4. Run `npx prisma db push` to initialize the schema.
-5. Deploy to a platform like **Render**, **Railway**, or **Heroku**.
-
-#### 2. Frontend
-1. Run `npm install` in the `frontend` folder.
-2. Build the app: `npm run build`.
-3. Deploy the `dist` folder to **Vercel**, **Netlify**, or **GitHub Pages**.
-
-## NDC - Power to the People!
+**NDC—Power to the People!**
