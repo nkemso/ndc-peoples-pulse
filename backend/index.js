@@ -3,13 +3,13 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const { PrismaClient } = require('@prisma/client');
 const Pusher = require('pusher');
+const { contentAgent, strategyAgent } = require('./ai_agents');
 require('dotenv').config();
 
 const app = express();
 const prisma = new PrismaClient();
 const port = process.env.PORT || 5000;
 
-// Pusher for real-time War Chest updates
 const pusher = new Pusher({
   appId: process.env.PUSHER_APP_ID || "app_id",
   key: process.env.PUSHER_KEY || "key",
@@ -21,9 +21,24 @@ const pusher = new Pusher({
 app.use(cors());
 app.use(bodyParser.json());
 
-// --- Routes ---
+// --- AI Endpoints ---
 
-// 1. Members
+// Golden Works AI (Content Agent)
+app.post('/api/ai/generate-content', async (req, res) => {
+  const { prompt, tone } = req.body;
+  const content = await contentAgent(prompt, tone);
+  res.json({ content });
+});
+
+// Strategic Intelligence (Strategy Agent)
+app.post('/api/ai/analyze-strategy', async (req, res) => {
+  const { context } = req.body;
+  const analysis = await strategyAgent(context);
+  res.json({ analysis });
+});
+
+// --- Other Routes ---
+
 app.post('/api/members/verify', async (req, res) => {
   const { phone, nin, pvcId } = req.body;
   try {
@@ -47,39 +62,19 @@ app.post('/api/members/verify', async (req, res) => {
   }
 });
 
-// 2. Financials (War Chest)
 app.get('/api/ledger/total', async (req, res) => {
-  const total = await prisma.donation.aggregate({
-    _sum: { amount: true }
-  });
-  res.json({ total: total._sum.amount || 0 });
-});
-
-app.post('/api/donate', async (req, res) => {
-  const { memberId, amount, type, tier } = req.body;
-  const hash = '0x' + Math.random().toString(16).slice(2, 10) + '...'; // Mock hash
-  
-  const donation = await prisma.donation.create({
-    data: { memberId, amount, type, tier, hash }
-  });
-
-  // Trigger Pusher update
-  pusher.trigger('war-chest', 'new-donation', { amount, donorId: memberId });
-
-  res.json(donation);
-});
-
-// 3. AI Content (Golden Works)
-app.post('/api/ai/generate', async (req, res) => {
-  const { prompt, tone } = req.body;
-  // This would typically call Gemini Pro API
-  res.json({ 
-    content: `[AI Generated with ${tone} tone]: Based on NDC policy, we are empowering the people...` 
-  });
+  try {
+    const total = await prisma.donation.aggregate({
+      _sum: { amount: true }
+    });
+    res.json({ total: total._sum.amount || 0 });
+  } catch (e) {
+    res.json({ total: 0, error: "DB not connected" });
+  }
 });
 
 app.get('/', (req, res) => {
-  res.send('NDC Pulse API - Operational');
+  res.send('NDC Pulse Multi-Agent API - Operational');
 });
 
 app.listen(port, () => {
