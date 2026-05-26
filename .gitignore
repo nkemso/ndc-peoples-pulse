@@ -1,0 +1,12 @@
+node_modules
+.env
+dist
+.next
+build
+*.log
+.prisma
+frontend/node_modules
+backend/node_modules
+backend/.env
+frontend/dist
+.DS_Store

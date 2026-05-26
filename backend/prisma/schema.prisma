@@ -1,0 +1,71 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Member {
+  id             String    @id @default(cuid())
+  nin            String?   @unique
+  pvcId          String?   @unique
+  fullName       String
+  phoneNumber    String    @unique
+  state          String
+  lga            String
+  ward           String
+  role           String    @default("MEMBER") // MEMBER, EXECUTIVE, VANGUARD
+  impactPoints   Int       @default(0)
+  verified       Boolean   @default(false)
+  createdAt      DateTime  @default(now())
+  donations      Donation[]
+  tasks          TaskAssignment[]
+}
+
+model Donation {
+  id          String   @id @default(cuid())
+  amount      Float
+  memberId    String
+  member      Member   @relation(fields: [memberId], references: [id])
+  type        String   // ONE_TIME, MONTHLY_TIER
+  tier        String?  // ORDINARY, FINANCIAL, VANGUARD
+  hash        String   @unique // Blockchain-ready transaction hash
+  createdAt   DateTime @default(now())
+}
+
+model Task {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  location    String
+  points      Int
+  category    String
+  status      String   @default("ACTIVE")
+  createdAt   DateTime @default(now())
+  assignments TaskAssignment[]
+}
+
+model TaskAssignment {
+  id        String   @id @default(cuid())
+  memberId  String
+  member    Member   @relation(fields: [memberId], references: [id])
+  taskId    String
+  task      Task     @relation(fields: [taskId], references: [id])
+  status    String   @default("ASSIGNED") // COMPLETED, FAILED
+  proofUrl  String?
+  createdAt DateTime @default(now())
+}
+
+model Policy {
+  id          String   @id @default(cuid())
+  title       String
+  content     String
+  category    String
+  sentiment   Float    @default(0.0)
+  createdAt   DateTime @default(now())
+}
