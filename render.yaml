@@ -14,10 +14,8 @@ services:
           property: connectionString
       - key: HF_TOKEN
         sync: false
-        placeholder: "Enter Hugging Face API Token (Free)"
       - key: GROQ_API_KEY
         sync: false
-        placeholder: "Enter Groq API Key (Free)"
       - key: PUSHER_APP_ID
         sync: false
       - key: PUSHER_KEY
@@ -25,8 +23,7 @@ services:
       - key: PUSHER_SECRET
         sync: false
       - key: PUSHER_CLUSTER
-        sync: false
-        default: "mt1"
+        default: mt1
 
   - type: web
     name: ndc-pulse-frontend
@@ -39,7 +36,7 @@ services:
         fromService:
           type: web
           name: ndc-pulse-backend
-          property: host
+          property: url
 
 databases:
   - name: ndc-db
