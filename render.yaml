@@ -12,13 +12,37 @@ services:
         fromDatabase:
           name: ndc-db
           property: connectionString
+      - key: HF_TOKEN
+        sync: false
+        placeholder: "Enter Hugging Face API Token (Free)"
+      - key: GROQ_API_KEY
+        sync: false
+        placeholder: "Enter Groq API Key (Free)"
+      - key: PUSHER_APP_ID
+        sync: false
+      - key: PUSHER_KEY
+        sync: false
+      - key: PUSHER_SECRET
+        sync: false
+      - key: PUSHER_CLUSTER
+        sync: false
+        default: "mt1"
+
   - type: web
     name: ndc-pulse-frontend
     env: static
     rootDir: frontend
     buildCommand: npm install && npm run build
     publishDir: dist
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: ndc-pulse-backend
+          property: host
 
 databases:
   - name: ndc-db
     plan: free
+    databaseName: ndc_pulse
+    user: ndc_admin
